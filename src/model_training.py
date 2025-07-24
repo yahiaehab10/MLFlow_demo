@@ -14,5 +14,12 @@ def train_model(X_train, y_train, X_val, y_val):
         preds = clf.predict(X_val)
         acc = accuracy_score(y_val, preds)
         mlflow.log_metric("val_accuracy", acc)
-        mlflow.sklearn.log_model(clf, "model")
+
+        # Try to log model with simpler approach for DagHub compatibility
+        try:
+            mlflow.sklearn.log_model(clf, "model")
+        except Exception as e:
+            print(f"Model logging failed: {e}")
+            print("Continuing without model logging...")
+
     return clf, acc

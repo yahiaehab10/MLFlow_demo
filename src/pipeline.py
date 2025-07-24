@@ -1,4 +1,5 @@
 """Simple ML pipeline demonstrating MLflow, Evidently, and DagsHub."""
+
 import os
 
 import mlflow
@@ -27,11 +28,13 @@ def run_pipeline():
     # Drift detection using Evidently
     os.makedirs("reports", exist_ok=True)
     report_path = os.path.join("reports", "drift_report.html")
-    generate_drift_report(X_train, X_test, report_path)
-    mlflow.log_artifact(report_path, artifact_path="drift")
+    drift_report = generate_drift_report(X_train, X_test, report_path)
+
+    # Only log artifact if the file was actually created
+    if os.path.exists(report_path):
+        mlflow.log_artifact(report_path, artifact_path="drift")
+    else:
+        print("Drift report HTML file not created, skipping artifact logging")
 
     mlflow.set_tag("val_accuracy", val_acc)
     mlflow.set_tag("test_accuracy", test_acc)
-
-
-
