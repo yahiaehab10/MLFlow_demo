@@ -1,63 +1,44 @@
-# MLflow Demo
+# MLflow_demo
 
-This project demonstrates a minimal workflow using **MLflow** integrated with **DagsHub** and **Evidently**. It covers experiment tracking, model registry, and drift detection in a single, reproducible pipeline.
+This is a proof of concept project demonstrating the use of MLflow for model lifecycle management, DagsHub integration for collaboration, and Evidently for drift detection.
 
 ## Project Structure
 
 ```
-mlflow-demo/
+Mlflow_demo/
+│
 ├── data/
+│   ├── raw/ # Original dataset
+│   ├── processed/ # Cleaned, transformed data
+│   └── drift_baseline/ # Baseline stats for drift detection
+│
 ├── notebooks/
-│   └── exploratory.ipynb
+│   ├── 01_data_cleaning.ipynb
+│   ├── 02_drift.ipynb
+│   └── 03_model_training.ipynb
+│
 ├── src/
-│   ├── data_processing.py
-│   ├── model_training.py
+│   ├── data_quality.py
 │   ├── drift_detection.py
-│   ├── model_testing.py
-│   └── pipeline.py
-├── environment.yml
-├── main.py
+│   ├── train.py
+│   └── evaluate.py
+│
+├── requirements.txt
 └── README.md
 ```
 
 ## Setup
 
-Create the Conda environment and install dependencies:
-
 ```bash
-conda env create -f environment.yml
-conda activate mlflow
+pip install -r requirements.txt
 ```
 
-## Running the Demo
+## Usage
 
-Execute the full pipeline with:
+1. Data cleaning and preprocessing
+2. Drift detection analysis
+3. Model training and evaluation
 
-```bash
-python main.py
-```
+## DagsHub Integration
 
-The script initializes MLflow tracking with DagsHub:
-
-```python
-import dagshub
-
-dagshub.init(repo_owner="yahiaehab10", repo_name="MLFlow_demo", mlflow=True)
-mlflow.set_tracking_uri("https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow")
-```
-
-Metrics, parameters and artifacts (including an Evidently drift report) are logged to the remote MLflow server. Open the DagsHub interface to explore runs and the model registry.
-
-## Reproducibility
-
-All dependencies are captured in `environment.yml`. The dataset used is the built-in Iris dataset from scikit-learn for simplicity.
-
-## Drift Detection
-
-`src/drift_detection.py` uses Evidently to generate an HTML data drift report comparing the training data to the evaluation data. The report is logged as an MLflow artifact for easy inspection.
-
-## Collaboration
-
-Since the tracking URI points to DagsHub, everyone with access to the repository can view experiments remotely, facilitating collaboration and model lifecycle management.
-
-
+See notebooks for MLflow tracking details.
