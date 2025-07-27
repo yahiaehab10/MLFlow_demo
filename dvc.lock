@@ -1,0 +1,38 @@
+schema: '2.0'
+stages:
+  full_pipeline:
+    cmd: python -m src.pipeline
+    deps:
+    - path: data/raw/iris.csv
+      hash: md5
+      md5: 4d301abed5efe50eccda350cde38e0eb
+      size: 2777
+    - path: src/data_preprocessing.py
+      hash: md5
+      md5: 64c9b865652c0164d8a6260daa53ff11
+      size: 337
+    - path: src/drift_detection.py
+      hash: md5
+      md5: a7e7323b9cde6dc67b94a76007978008
+      size: 549
+    - path: src/pipeline.py
+      hash: md5
+      md5: 135bc8d5ba82bb0460f7fd492ebb404d
+      size: 1999
+    - path: src/train.py
+      hash: md5
+      md5: d61b268393a7cfd66e240b89fe37785c
+      size: 1933
+    outs:
+    - path: data/drift_baseline/iris_drift_baseline.html
+      hash: md5
+      md5: 7efd5218beded6e5157a8dd3a14f9584
+      size: 3563255
+    - path: data/processed/iris_clean.csv
+      hash: md5
+      md5: 4d301abed5efe50eccda350cde38e0eb
+      size: 2777
+    - path: metrics.json
+      hash: md5
+      md5: 8ecdf08a91b4ceeb03965e089aedc90a
+      size: 50

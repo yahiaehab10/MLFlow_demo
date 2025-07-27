@@ -1,20 +1,4 @@
 stages:
-  clean_data:
-    cmd: python -m src.data_preprocessing
-    deps:
-    - data/raw/iris.csv
-    - src/data_preprocessing.py
-    outs:
-    - data/processed/iris_clean.csv
-    
-  train_model:
-    cmd: python -m src.train
-    deps:
-    - data/processed/iris_clean.csv
-    - src/train.py
-    metrics:
-    - metrics.json
-    
   full_pipeline:
     cmd: python -m src.pipeline
     deps:
