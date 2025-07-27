@@ -1,0 +1,6 @@
+[core]
+    remote = origin
+['remote "origin"']
+    url = https://dagshub.com/yahiaehab10/MLFlow_demo.dvc
+    auth = basic
+    user = yahiaehab10
