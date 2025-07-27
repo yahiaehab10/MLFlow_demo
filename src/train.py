@@ -42,7 +42,7 @@ def train_model(data_path, stage=None):
 
 if __name__ == "__main__":
     # When running standalone, initialize DagsHub and start an MLflow run
-    dagshub.init(repo_owner="yahiaehab10", repo_name="MLflow_demo_MF", mlflow=True)
+    dagshub.init(repo_owner="yahiaehab10", repo_name="MLFlow_demo", mlflow=True)
     stage = input("Enter model stage (None, Staging, Production): ") or None
     with mlflow.start_run():
         train_model("data/processed/iris_clean.csv", stage=stage)
