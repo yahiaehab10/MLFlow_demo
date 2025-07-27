@@ -1,15 +1,20 @@
-# MLflow_demo
+# MLFlow Demo Project
 
-This is a proof of concept project demonstrating the use of MLflow for model lifecycle management, DagsHub integration for collaboration, and Evidently for drift detection.
+This repository demonstrates a full ML model lifecycle using MLflow, Evidently for drift detection, and DagsHub for collaboration and tracking. It includes:
+
+- **Model Lifecycle Management**: MLflow Tracking, Model Registry, Artifacts, Logging
+- **Drift Detection**: Evidently
+- **Collaboration**: DagsHub integration
 
 ## Project Structure
 
 ```
-Mlflow_demo/
+MLflow_demo/
 │
 ├── data/
-│   ├── raw/ # Original dataset
-│   ├── processed/ # Cleaned, transformed data
+│   ├── data_loader.py
+│   ├── raw/            # Original dataset
+│   ├── processed/      # Cleaned, transformed data
 │   └── drift_baseline/ # Baseline stats for drift detection
 │
 ├── notebooks/
@@ -18,27 +23,36 @@ Mlflow_demo/
 │   └── 03_model_training.ipynb
 │
 ├── src/
-│   ├── data_quality.py
+│   ├── data_preprocessing.py
 │   ├── drift_detection.py
 │   ├── train.py
-│   └── evaluate.py
-│
+│   ├── evaluate.py
+│   └── pipeline.py
 ├── requirements.txt
 └── README.md
+└── main.py
 ```
 
 ## Setup
 
-```bash
-pip install -r requirements.txt
-```
+- Python 3.11.11
+- Install dependencies: `pip install -r requirements.txt`
 
 ## Usage
 
-1. Data cleaning and preprocessing
-2. Drift detection analysis
-3. Model training and evaluation
+- Run the pipeline: `python main.py`
+- Notebooks for step-by-step exploration in `notebooks/`
 
-## DagsHub Integration
+## Features
 
-See notebooks for MLflow tracking details.
+- MLflow Tracking and Model Registry
+- Drift Detection with Evidently
+- DagsHub integration for collaboration
+
+## Data
+
+- Uses datasets from `sklearn`
+
+---
+
+For more details, see the notebooks and source files.

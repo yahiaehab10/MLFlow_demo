@@ -1,20 +1,17 @@
-import shutil
 import pandas as pd
-from evidently.dashboard import Dashboard
-from evidently.dashboard.tabs import DataDriftTab
+from evidently.report import Report
+from evidently.metric_preset import DataDriftPreset
 
 
-def save_baseline(processed_path: str, baseline_path: str) -> None:
-    """Copy processed data to baseline for drift detection."""
-    shutil.copy(processed_path, baseline_path)
+def generate_drift_baseline(processed_path, baseline_path):
+    df = pd.read_csv(processed_path)
+    report = Report(metrics=[DataDriftPreset()])
+    report.run(reference_data=df, current_data=df)
+    report.save_html(baseline_path)
+    print(f"Drift baseline saved to {baseline_path}")
 
 
-def generate_drift_report(
-    baseline_path: str, current_path: str, report_path: str
-) -> None:
-    """Generate drift detection report comparing baseline and current data."""
-    ref = pd.read_csv(baseline_path)
-    curr = pd.read_csv(current_path)
-    dashboard = Dashboard(tabs=[DataDriftTab()])
-    dashboard.calculate(ref, curr)
-    dashboard.save(report_path)
+if __name__ == "__main__":
+    generate_drift_baseline(
+        "data/processed/iris_clean.csv", "data/drift_baseline/iris_drift_baseline.html"
+    )
