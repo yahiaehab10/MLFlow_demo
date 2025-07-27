@@ -5,3 +5,4 @@ dagshub==0.3.23
 pandas==2.2.2
 numpy==1.26.4
 matplotlib==3.8.4
+dvc==3.34.0
