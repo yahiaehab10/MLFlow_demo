@@ -43,6 +43,7 @@ MLflow_demo/
 ## 🛠️ Setup
 
 ### Prerequisites
+
 - Python 3.11+
 - Git
 - DVC
@@ -52,17 +53,20 @@ MLflow_demo/
 ### Installation
 
 1. **Clone the repository:**
+
    ```bash
    git clone https://github.com/yahiaehab10/MLFlow_demo.git
    cd MLFlow_demo
    ```
 
 2. **Install dependencies:**
+
    ```bash
    pip install -r requirements.txt
    ```
 
 3. **Configure DagsHub authentication (for data push):**
+
    ```bash
    # Get your token from: https://dagshub.com/user/settings/tokens
    dvc remote modify origin password <your-dagshub-token>
@@ -73,11 +77,13 @@ MLflow_demo/
 ### Run Complete Pipeline
 
 **Option 1: DVC Pipeline (Recommended)**
+
 ```bash
 dvc repro  # Runs the complete reproducible pipeline
 ```
 
 **Option 2: Direct Python Execution**
+
 ```bash
 python -m src.pipeline  # Runs with MLflow logging to DagsHub
 ```
@@ -94,23 +100,28 @@ python -m src.pipeline  # Runs with MLflow logging to DagsHub
 - **Check Pipeline Status**: `dvc status`
 - **Push Data to DagsHub**: `dvc push`
 - **Pull Data from DagsHub**: `dvc pull`
+
 ## 📊 MLflow & DagsHub Integration
 
 ### Experiment Tracking
+
 All experiments are automatically tracked and logged to:
+
 - **DagsHub MLflow**: [https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow](https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow)
 - **Local MLflow UI**: Run `mlflow ui` and visit [http://localhost:5000](http://localhost:5000)
 
 ### Model Registry & Stage Management
+
 - Models are automatically registered as `IrisRandomForest` in MLflow Model Registry
 - Support for model stage transitions (`Staging`, `Production`)
 - Model versioning and lineage tracking
 - Artifact storage (drift reports, model files, metrics)
 
 ### Logged Metrics & Parameters
+
 - **Parameters**: Data paths, model hyperparameters, random seeds
 - **Metrics**: Accuracy, precision, recall
-- **Artifacts**: 
+- **Artifacts**:
   - Drift baseline HTML reports
   - Model files (pickle format)
   - Analysis images (when available)
@@ -118,11 +129,13 @@ All experiments are automatically tracked and logged to:
 ## 📈 DagsHub Features
 
 ### Data Pipeline Visualization
+
 - Visual representation of your ML pipeline
 - Dependency tracking between stages
 - Real-time status monitoring
 
 ### Collaboration
+
 - Version-controlled datasets with DVC
 - Experiment comparison and analysis
 - Team collaboration on ML projects
@@ -157,28 +170,31 @@ The pipeline includes comprehensive drift detection using **Evidently**:
 ## 🔧 Configuration
 
 ### Environment Variables
+
 The pipeline uses the following configuration:
+
 - **DagsHub Repository**: `yahiaehab10/MLFlow_demo`
 - **MLflow Tracking URI**: `https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow`
 - **Model Name**: `IrisRandomForest`
 
 ### DVC Configuration
+
 ```yaml
 # dvc.yaml
 stages:
   full_pipeline:
     cmd: python -m src.pipeline
     deps:
-    - data/raw/iris.csv
-    - src/pipeline.py
-    - src/data_preprocessing.py
-    - src/train.py
-    - src/drift_detection.py
+      - data/raw/iris.csv
+      - src/pipeline.py
+      - src/data_preprocessing.py
+      - src/train.py
+      - src/drift_detection.py
     outs:
-    - data/processed/iris_clean.csv
-    - data/drift_baseline/iris_drift_baseline.html
+      - data/processed/iris_clean.csv
+      - data/drift_baseline/iris_drift_baseline.html
     metrics:
-    - metrics.json
+      - metrics.json
 ```
 
 ## 🚨 Troubleshooting
@@ -186,15 +202,18 @@ stages:
 ### Common Issues
 
 1. **DVC Push Authentication Error**:
+
    ```bash
    dvc remote modify origin password <your-dagshub-token>
    ```
 
 2. **MLflow Tracking URI Error**:
+
    - Ensure you have internet connectivity
    - Verify DagsHub repository access
 
 3. **Pipeline Dependencies**:
+
    ```bash
    pip install -r requirements.txt
    ```
@@ -205,14 +224,6 @@ stages:
 - **DagsHub**: [DagsHub Tutorial](https://dagshub.com/docs/tutorial/)
 - **DVC**: [DVC Documentation](https://dvc.org/doc)
 - **Evidently**: [Evidently Documentation](https://docs.evidentlyai.com/)
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Run the pipeline to ensure everything works
-5. Submit a pull request
 
 ## 📄 License
 

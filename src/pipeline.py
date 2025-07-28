@@ -1,8 +1,7 @@
 from src.data_preprocessing import clean_data
 from src.drift_detection import generate_drift_baseline
 from src.train import train_model
-
-# from src.evaluate import evaluate_model
+from src.evaluate import evaluate_model
 
 import dagshub
 import mlflow
@@ -47,8 +46,8 @@ def run_pipeline():
         # mlflow.log_artifact("path/to/your/analysis_image.png", artifact_path="analysis_images")
 
         # Step 4: Evaluate model (optional)
-        # report = evaluate_model(model, 'data/processed/iris_clean.csv')
-        # print(report)
+        report = evaluate_model(model, "data/processed/iris_clean.csv")
+        print(report)
 
 
 if __name__ == "__main__":

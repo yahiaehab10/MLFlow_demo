@@ -2,13 +2,13 @@ stages:
   full_pipeline:
     cmd: python -m src.pipeline
     deps:
-    - data/raw/iris.csv
-    - src/pipeline.py
-    - src/data_preprocessing.py
-    - src/train.py
-    - src/drift_detection.py
+      - data/raw/iris.csv
+      - src/pipeline.py
+      - src/data_preprocessing.py
+      - src/train.py
+      - src/drift_detection.py
     outs:
-    - data/processed/iris_clean.csv
-    - data/drift_baseline/iris_drift_baseline.html
+      - data/processed/iris_clean.csv
+      - data/drift_baseline/iris_drift_baseline.html
     metrics:
-    - metrics.json
+      - metrics.json
