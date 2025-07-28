@@ -228,7 +228,3 @@ stages:
 ## License
 
 This project is open source and available under the [MIT License](LICENSE).
-
----
-
-**Built with ❤️ using MLflow, DagsHub, DVC, and Evidently**
