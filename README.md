@@ -2,15 +2,15 @@
 
 This repository demonstrates a complete MLOps pipeline using **MLflow**, **DagsHub**, **DVC**, and **Evidently** for comprehensive model lifecycle management, data versioning, and experiment tracking.
 
-## 🚀 Features
+## Features
 
-- **🔄 MLflow Integration**: Experiment tracking, model registry, and artifact logging
-- **📊 DagsHub Pipeline**: Complete MLOps collaboration platform with visual pipelines
-- **📦 DVC Data Versioning**: Version-controlled datasets and model artifacts
-- **🔍 Drift Detection**: Evidently-based data drift monitoring
-- **⚡ Automated Pipeline**: End-to-end reproducible ML workflows
+- ** MLflow Integration**: Experiment tracking, model registry, and artifact logging
+- ** DagsHub Pipeline**: Complete MLOps collaboration platform with visual pipelines
+- ** DVC Data Versioning**: Version-controlled datasets and model artifacts
+- ** Drift Detection**: Evidently-based data drift monitoring
+- ** Automated Pipeline**: End-to-end reproducible ML workflows
 
-## 🏗️ Project Structure
+## Project Structure
 
 ```
 MLflow_demo/
@@ -40,7 +40,7 @@ MLflow_demo/
 └── README.md
 ```
 
-## 🛠️ Setup
+## Setup
 
 ### Prerequisites
 
@@ -72,7 +72,7 @@ MLflow_demo/
    dvc remote modify origin password <your-dagshub-token>
    ```
 
-## 🚀 Usage
+## Usage
 
 ### Run Complete Pipeline
 
@@ -101,7 +101,7 @@ python -m src.pipeline  # Runs with MLflow logging to DagsHub
 - **Push Data to DagsHub**: `dvc push`
 - **Pull Data from DagsHub**: `dvc pull`
 
-## 📊 MLflow & DagsHub Integration
+## MLflow & DagsHub Integration
 
 ### Experiment Tracking
 
@@ -126,7 +126,7 @@ All experiments are automatically tracked and logged to:
   - Model files (pickle format)
   - Analysis images (when available)
 
-## 📈 DagsHub Features
+## DagsHub Features
 
 ### Data Pipeline Visualization
 
@@ -141,7 +141,7 @@ All experiments are automatically tracked and logged to:
 - Team collaboration on ML projects
 - Model performance monitoring
 
-## 🔍 Data Drift Detection
+## Data Drift Detection
 
 The pipeline includes comprehensive drift detection using **Evidently**:
 
@@ -150,7 +150,7 @@ The pipeline includes comprehensive drift detection using **Evidently**:
 - **HTML Reports**: Interactive drift analysis reports
 - **Automated Alerts**: Integration with MLflow for drift tracking
 
-## 📋 Pipeline Workflow
+## Pipeline Workflow
 
 1. **Data Loading**: Load raw iris dataset
 2. **Data Cleaning**: Preprocess and clean data
@@ -160,14 +160,14 @@ The pipeline includes comprehensive drift detection using **Evidently**:
 6. **Metrics Logging**: Save performance metrics
 7. **Artifact Upload**: Store reports and models in DagsHub
 
-## 🛡️ Data Versioning with DVC
+## Data Versioning with DVC
 
 - **Raw Data**: `data/raw/iris.csv` - Version controlled with DVC
 - **Processed Data**: `data/processed/iris_clean.csv` - Pipeline output
 - **Models**: Stored in MLflow model registry
 - **Reports**: `data/drift_baseline/` - Drift analysis artifacts
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 
@@ -197,7 +197,7 @@ stages:
       - metrics.json
 ```
 
-## 🚨 Troubleshooting
+## Troubleshooting
 
 ### Common Issues
 
@@ -218,14 +218,14 @@ stages:
    pip install -r requirements.txt
    ```
 
-## 📚 Documentation
+## Documentation
 
 - **MLflow**: [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - **DagsHub**: [DagsHub Tutorial](https://dagshub.com/docs/tutorial/)
 - **DVC**: [DVC Documentation](https://dvc.org/doc)
 - **Evidently**: [Evidently Documentation](https://docs.evidentlyai.com/)
 
-## 📄 License
+## License
 
 This project is open source and available under the [MIT License](LICENSE).
 
