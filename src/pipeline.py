@@ -14,18 +14,20 @@ def setup_mlflow_tracking():
     dagshub_token = os.getenv("DAGSHUB_TOKEN")
     mlflow_username = os.getenv("MLFLOW_TRACKING_USERNAME", "yahiaehab10")
     mlflow_password = os.getenv("MLFLOW_TRACKING_PASSWORD", dagshub_token)
-    
+
     if dagshub_token and mlflow_password:
         try:
             # Set up DagsHub MLflow with authentication
-            mlflow.set_tracking_uri("https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow")
-            
+            mlflow.set_tracking_uri(
+                "https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow"
+            )
+
             # Try to authenticate by creating a simple connection test
             client = mlflow.tracking.MlflowClient()
             experiments = client.search_experiments(max_results=1)
             print("✓ Successfully connected to DagsHub MLflow")
             return True
-            
+
         except Exception as e:
             print(f"❌ DagsHub authentication failed: {e}")
             print("🔄 Falling back to local MLflow tracking")
@@ -39,7 +41,7 @@ def setup_mlflow_tracking():
 
 def run_pipeline():
     print("🚀 Starting ML Pipeline...")
-    
+
     # Setup MLflow tracking
     dagshub_connected = setup_mlflow_tracking()
 
