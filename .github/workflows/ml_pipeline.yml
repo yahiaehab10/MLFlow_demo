@@ -24,10 +24,17 @@ jobs:
     - name: Run tests
       run: |
         python -m pytest tests/ -v
-    - name: Pull DVC data
+    - name: Configure DVC and pull data
       run: |
-        pip install dvc[dagsHub]
-        dvc remote modify origin password $DAGSHUB_TOKEN
+        pip install dvc[dagshub]
+        echo "Setting up DVC remote with DagsHub..."
+        if [ -z "$DAGSHUB_TOKEN" ]; then
+          echo "Error: DAGSHUB_TOKEN is not set"
+          exit 1
+        fi
+        # Configure DVC remote with token
+        dvc remote modify origin user yahiaehab10
+        dvc remote modify origin password "$DAGSHUB_TOKEN"
         dvc pull
     - name: Run pipeline (training, evaluation, logging)
       run: |
