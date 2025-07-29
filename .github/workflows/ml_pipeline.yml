@@ -54,4 +54,10 @@ jobs:
           }
       - name: Deploy model (promote to production if criteria met)
         run: |
-          python scripts/promote_model.py
+          echo "🎯 Starting model promotion..."
+          timeout 120 python scripts/promote_model.py || {
+            echo "❌ Model promotion timed out after 2 minutes"
+            echo "This usually means authorization is required interactively"
+            echo "Check DagsHub token configuration or use local MLflow"
+            exit 1
+          }

@@ -7,19 +7,38 @@ Promotes models from staging to production based on performance criteria.
 import os
 import json
 import mlflow
-import dagshub
 from mlflow.tracking import MlflowClient
 
 
-def setup_dagshub():
-    """Setup DagsHub connection for MLflow tracking"""
-    try:
-        dagshub.init(repo_owner="yahiaehab10", repo_name="MLFlow_demo", mlflow=True)
-        print("✓ DagsHub connection established")
-    except Exception as e:
-        print(f"Warning: Could not connect to DagsHub: {e}")
-        # Continue with local MLflow if DagsHub fails
+def setup_mlflow_tracking():
+    """Setup MLflow tracking with proper authentication"""
+    # Check if we have authentication credentials
+    dagshub_token = os.getenv("DAGSHUB_TOKEN")
+    mlflow_username = os.getenv("MLFLOW_TRACKING_USERNAME", "yahiaehab10")
+    mlflow_password = os.getenv("MLFLOW_TRACKING_PASSWORD", dagshub_token)
+
+    if dagshub_token and mlflow_password:
+        try:
+            # Set up DagsHub MLflow with authentication
+            mlflow.set_tracking_uri(
+                "https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow"
+            )
+
+            # Try to authenticate by creating a simple connection test
+            client = MlflowClient()
+            experiments = client.search_experiments(max_results=1)
+            print("✓ Successfully connected to DagsHub MLflow")
+            return True
+
+        except Exception as e:
+            print(f"❌ DagsHub authentication failed: {e}")
+            print("🔄 Falling back to local MLflow tracking")
+            mlflow.set_tracking_uri("file:./mlruns")
+            return False
+    else:
+        print("⚠️  No DagsHub credentials found, using local MLflow")
         mlflow.set_tracking_uri("file:./mlruns")
+        return False
 
 
 def get_latest_experiment_metrics():
@@ -56,7 +75,7 @@ def promote_model():
     print("🚀 Starting model promotion process...")
 
     # Setup connections
-    setup_dagshub()
+    dagshub_connected = setup_mlflow_tracking()
 
     # Get performance metrics
     metrics = get_latest_experiment_metrics()
