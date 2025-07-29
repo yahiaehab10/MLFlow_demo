@@ -21,9 +21,6 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-      - name: Run tests
-        run: |
-          python -m pytest tests/ -v
       - name: Configure DVC and pull data
         run: |
           pip install dvc[dagshub]
@@ -36,6 +33,9 @@ jobs:
           dvc remote modify origin user yahiaehab10
           dvc remote modify origin password "$DAGSHUB_TOKEN"
           dvc pull
+      - name: Run tests
+        run: |
+          python -m pytest tests/ -v
       - name: Run pipeline (training, evaluation, logging)
         run: |
           python -m src.pipeline
