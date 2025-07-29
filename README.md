@@ -2,6 +2,8 @@
 
 This repository demonstrates a complete MLOps pipeline using **MLflow**, **DagsHub**, **DVC**, and **Evidently** for comprehensive model lifecycle management, data versioning, and experiment tracking.
 
+🚀 **CI/CD Pipeline Active** - Automated deployment and model promotion enabled!
+
 ## Features
 
 - ** MLflow Integration**: Experiment tracking, model registry, and artifact logging
