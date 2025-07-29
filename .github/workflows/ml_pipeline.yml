@@ -2,9 +2,9 @@ name: ML Pipeline CI/CD & Deploy
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
   build-test-deploy:
@@ -13,32 +13,32 @@ jobs:
       DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
       MLFLOW_TRACKING_URI: "https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow"
     steps:
-    - uses: actions/checkout@v3
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.11'
-    - name: Install dependencies
-      run: |
-        pip install -r requirements.txt
-    - name: Run tests
-      run: |
-        python -m pytest tests/ -v
-    - name: Configure DVC and pull data
-      run: |
-        pip install dvc[dagshub]
-        echo "Setting up DVC remote with DagsHub..."
-        if [ -z "$DAGSHUB_TOKEN" ]; then
-          echo "Error: DAGSHUB_TOKEN is not set"
-          exit 1
-        fi
-        # Configure DVC remote with token
-        dvc remote modify origin user yahiaehab10
-        dvc remote modify origin password "$DAGSHUB_TOKEN"
-        dvc pull
-    - name: Run pipeline (training, evaluation, logging)
-      run: |
-        python -m src.pipeline
-    - name: Deploy model (promote to production if criteria met)
-      run: |
-        python scripts/promote_model.py
+      - uses: actions/checkout@v3
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+      - name: Run tests
+        run: |
+          python -m pytest tests/ -v
+      - name: Configure DVC and pull data
+        run: |
+          pip install dvc[dagshub]
+          echo "Setting up DVC remote with DagsHub..."
+          if [ -z "$DAGSHUB_TOKEN" ]; then
+            echo "Error: DAGSHUB_TOKEN is not set"
+            exit 1
+          fi
+          # Configure DVC remote with token
+          dvc remote modify origin user yahiaehab10
+          dvc remote modify origin password "$DAGSHUB_TOKEN"
+          dvc pull
+      - name: Run pipeline (training, evaluation, logging)
+        run: |
+          python -m src.pipeline
+      - name: Deploy model (promote to production if criteria met)
+        run: |
+          python scripts/promote_model.py
