@@ -12,6 +12,8 @@ jobs:
     env:
       DAGSHUB_TOKEN: ${{ secrets.DAGSHUB_TOKEN }}
       MLFLOW_TRACKING_URI: "https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow"
+      MLFLOW_TRACKING_USERNAME: "yahiaehab10"
+      MLFLOW_TRACKING_PASSWORD: ${{ secrets.DAGSHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v3
       - name: Set up Python
@@ -38,7 +40,18 @@ jobs:
           python -m pytest tests/ -v
       - name: Run pipeline (training, evaluation, logging)
         run: |
-          python -m src.pipeline
+          echo "🔍 Debug: Environment variables"
+          echo "DAGSHUB_TOKEN exists: $([ -n "$DAGSHUB_TOKEN" ] && echo "YES" || echo "NO")"
+          echo "MLFLOW_TRACKING_URI: $MLFLOW_TRACKING_URI"
+          echo "MLFLOW_TRACKING_USERNAME: $MLFLOW_TRACKING_USERNAME"
+          echo ""
+          echo "🚀 Starting ML Pipeline..."
+          timeout 300 python -m src.pipeline || {
+            echo "❌ Pipeline timed out after 5 minutes"
+            echo "This usually means authorization is required interactively"
+            echo "Check DagsHub token configuration or use local MLflow"
+            exit 1
+          }
       - name: Deploy model (promote to production if criteria met)
         run: |
           python scripts/promote_model.py

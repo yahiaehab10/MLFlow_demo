@@ -3,16 +3,46 @@ from src.drift_detection import generate_drift_baseline
 from src.train import train_model
 from src.evaluate import evaluate_model
 
-import dagshub
+import os
 import mlflow
 import json
 
 
+def setup_mlflow_tracking():
+    """Setup MLflow tracking with proper authentication"""
+    # Check if we have authentication credentials
+    dagshub_token = os.getenv("DAGSHUB_TOKEN")
+    mlflow_username = os.getenv("MLFLOW_TRACKING_USERNAME", "yahiaehab10")
+    mlflow_password = os.getenv("MLFLOW_TRACKING_PASSWORD", dagshub_token)
+    
+    if dagshub_token and mlflow_password:
+        try:
+            # Set up DagsHub MLflow with authentication
+            mlflow.set_tracking_uri("https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow")
+            
+            # Try to authenticate by creating a simple connection test
+            client = mlflow.tracking.MlflowClient()
+            experiments = client.search_experiments(max_results=1)
+            print("✓ Successfully connected to DagsHub MLflow")
+            return True
+            
+        except Exception as e:
+            print(f"❌ DagsHub authentication failed: {e}")
+            print("🔄 Falling back to local MLflow tracking")
+            mlflow.set_tracking_uri("file:./mlruns")
+            return False
+    else:
+        print("⚠️  No DagsHub credentials found, using local MLflow")
+        mlflow.set_tracking_uri("file:./mlruns")
+        return False
+
+
 def run_pipeline():
-    # Set MLflow tracking URI to DagsHub
-    mlflow.set_tracking_uri("https://dagshub.com/yahiaehab10/MLFlow_demo.mlflow")
-    # Initialize DagsHub MLflow tracking
-    dagshub.init(repo_owner="yahiaehab10", repo_name="MLFlow_demo", mlflow=True)
+    print("🚀 Starting ML Pipeline...")
+    
+    # Setup MLflow tracking
+    dagshub_connected = setup_mlflow_tracking()
+
     # Start MLflow run for the pipeline
     with mlflow.start_run(run_name="full_pipeline"):
         # Step 1: Clean data
