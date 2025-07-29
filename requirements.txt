@@ -6,3 +6,6 @@ pandas==2.2.2
 numpy==1.26.4
 matplotlib==3.8.4
 dvc==3.34.0
+pytest==8.0.0
+flake8==7.0.0
+black==24.1.0
