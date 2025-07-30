@@ -45,18 +45,18 @@ jobs:
           echo "MLFLOW_TRACKING_URI: $MLFLOW_TRACKING_URI"
           echo "MLFLOW_TRACKING_USERNAME: $MLFLOW_TRACKING_USERNAME"
           echo ""
-          echo "🚀 Starting ML Pipeline..."
+          echo " Starting ML Pipeline..."
           timeout 300 python -m src.pipeline || {
-            echo "❌ Pipeline timed out after 5 minutes"
+            echo " Pipeline timed out after 5 minutes"
             echo "This usually means authorization is required interactively"
             echo "Check DagsHub token configuration or use local MLflow"
             exit 1
           }
       - name: Deploy model (promote to production if criteria met)
         run: |
-          echo "🎯 Starting model promotion..."
+          echo " Starting model promotion..."
           timeout 120 python scripts/promote_model.py || {
-            echo "❌ Model promotion timed out after 2 minutes"
+            echo " Model promotion timed out after 2 minutes"
             echo "This usually means authorization is required interactively"
             echo "Check DagsHub token configuration or use local MLflow"
             exit 1

@@ -2,7 +2,11 @@
 
 This repository demonstrates a complete MLOps pipeline using **MLflow**, **DagsHub**, **DVC**, and **Evidently** for comprehensive model lifecycle management, data versioning, and experiment tracking.
 
-**CI/CD Pipeline Active** - Automated deployment and model promotion enabled!
+**Features:**
+
+- **CI/CD Pipeline Active** - Automated deployment and model promotion
+- **Model Serving API** - FastAPI REST API for real-time predictions
+- **Docker Support** - Containerized deployment ready
 
 ## Features
 
@@ -11,48 +15,127 @@ This repository demonstrates a complete MLOps pipeline using **MLflow**, **DagsH
 - **DVC Data Versioning**: Version-controlled datasets and model artifacts
 - **Drift Detection**: Evidently-based data drift monitoring
 - **Automated Pipeline**: End-to-end reproducible ML workflows
+- **Model Serving**: FastAPI REST API with Docker deployment
+- **Interactive Documentation**: Swagger UI at `/docs` endpoint
 
 ## Project Structure
 
 ```
 MLflow_demo/
 │
+├── app.py                     # FastAPI model serving application
+├── simple_train.py            # Quick model training script
+├── test_api.py               # API testing suite
+├── Dockerfile                # Docker configuration
+├── setup.sh                  # Automated setup script
+│
 ├── data/
 │   ├── data_loader.py
-│   ├── raw/                    # Original dataset (DVC tracked)
-│   ├── processed/              # Cleaned data (pipeline output)
-│   └── drift_baseline/         # Drift detection reports
-│
-├── notebooks/
-│   ├── 01_data_cleaning.ipynb
-│   ├── 02_drift.ipynb
-│   └── 03_model_training.ipynb
+│   ├── raw/                  # Original dataset (DVC tracked)
+│   ├── processed/            # Cleaned data (pipeline output)
+│   └── drift_baseline/       # Drift detection reports
 │
 ├── src/
-│   ├── data_preprocessing.py   # Data cleaning pipeline
-│   ├── drift_detection.py      # Evidently drift detection
-│   ├── train.py               # Model training with MLflow
-│   ├── evaluate.py            # Model evaluation
-│   └── pipeline.py            # Complete end-to-end pipeline
+│   ├── data_preprocessing.py # Data cleaning pipeline
+│   ├── drift_detection.py    # Evidently drift detection
+│   ├── train.py             # Model training with MLflow
+│   ├── evaluate.py          # Model evaluation
+│   └── pipeline.py          # Complete end-to-end pipeline
 │
-├── dvc.yaml                   # DVC pipeline configuration
-├── dvc.lock                   # Pipeline lock file
-├── metrics.json               # Pipeline metrics output
-├── requirements.txt
-└── README.md
+├── scripts/
+│   ├── monitor_model.py     # Model monitoring utilities
+│   └── promote_model.py     # Model promotion utilities
+│
+├── notebooks/               # Jupyter notebooks for exploration
+├── tests/                   # Unit tests
+├── dvc.yaml                 # DVC pipeline configuration
+├── dvc.lock                 # Pipeline lock file
+├── metrics.json             # Pipeline metrics output
+└── requirements.txt
 ```
 
-## Setup
+## Quick Start
+
+### Option 1: Model Serving API (Recommended for Testing)
+
+```bash
+# 1. Install dependencies
+pip install -r requirements.txt
+
+# 2. Train a simple model
+python simple_train.py
+
+# 3. Start the API server
+python app.py
+```
+
+**API Available at:** http://localhost:8000
+**Interactive Docs:** http://localhost:8000/docs
+
+### Option 2: Docker Deployment
+
+```bash
+# Build and run with Docker
+docker build -t iris-model-api .
+docker run -p 8000:8000 iris-model-api
+```
+
+### Option 3: Complete MLOps Pipeline
+
+```bash
+# Run full pipeline with MLflow tracking
+dvc repro
+# OR
+python -m src.pipeline
+```
+
+## Model Serving API
+
+### API Endpoints
+
+- **`GET /`** - Welcome message and API status
+- **`POST /predict`** - Make predictions
+  - Input format:
+    ```json
+    {
+      "features": [5.1, 3.5, 1.4, 0.2]
+    }
+    ```
+  - Returns prediction for the iris class (0=Setosa, 1=Versicolor, 2=Virginica)
+
+### Example Usage
+
+**cURL:**
+
+```bash
+curl -X POST "http://localhost:8000/predict" \
+     -H "Content-Type: application/json" \
+     -d '{"features": [5.1, 3.5, 1.4, 0.2]}'
+```
+
+**Python:**
+
+```python
+import requests
+response = requests.post(
+    "http://localhost:8000/predict",
+    json={"features": [5.1, 3.5, 1.4, 0.2]}
+)
+print(response.json())  # {"prediction": 0, "features": [...]}
+```
+
+**Interactive Documentation:** Visit http://localhost:8000/docs
+
+## Setup & Installation
 
 ### Prerequisites
 
 - Python 3.11+
 - Git
-- DVC
-- MLflow
-- DagsHub account
+- Docker (optional, for containerized deployment)
+- DagsHub account (for full MLOps pipeline)
 
-### Installation
+### Installation Steps
 
 1. **Clone the repository:**
 
@@ -67,7 +150,7 @@ MLflow_demo/
    pip install -r requirements.txt
    ```
 
-3. **Configure DagsHub authentication (for data push):**
+3. **Configure DagsHub authentication (optional, for full pipeline):**
 
    ```bash
    # Get your token from: https://dagshub.com/user/settings/tokens
@@ -76,32 +159,34 @@ MLflow_demo/
 
 ## Usage
 
-### Run Complete Pipeline
+### Quick Testing & Development
 
-**Option 1: DVC Pipeline (Recommended)**
-
-```bash
-dvc repro  # Runs the complete reproducible pipeline
-```
-
-**Option 2: Direct Python Execution**
+**Train and serve model locally:**
 
 ```bash
-python -m src.pipeline  # Runs with MLflow logging to DagsHub
+python simple_train.py  # Train model
+python app.py           # Start API server
+python test_api.py      # Run test suite
 ```
 
-### Individual Components
+### Production Deployment
 
-- **Data Processing**: `python -m src.data_preprocessing`
-- **Model Training**: `python -m src.train`
-- **Drift Detection**: `python -m src.drift_detection`
+**Docker deployment:**
 
-### DVC Commands
+```bash
+docker build -t iris-model-api .
+docker run -d -p 8000:8000 iris-model-api
+```
 
-- **View Pipeline**: `dvc dag`
-- **Check Pipeline Status**: `dvc status`
-- **Push Data to DagsHub**: `dvc push`
-- **Pull Data from DagsHub**: `dvc pull`
+### MLOps Pipeline (Advanced)
+
+**Complete pipeline with tracking:**
+
+```bash
+dvc repro               # DVC pipeline (recommended)
+# OR
+python -m src.pipeline  # Direct execution with MLflow logging
+```
 
 ## MLflow & DagsHub Integration
 
@@ -221,6 +306,13 @@ stages:
    ```
 
 ## Documentation
+
+📚 **Additional Guides:**
+
+- **[QUICK_START.md](QUICK_START.md)** - Essential commands for model serving
+- **[SERVING_GUIDE.md](SERVING_GUIDE.md)** - Comprehensive deployment guide
+
+📖 **External Resources:**
 
 - **MLflow**: [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - **DagsHub**: [DagsHub Tutorial](https://dagshub.com/docs/tutorial/)
