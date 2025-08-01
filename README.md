@@ -307,12 +307,12 @@ stages:
 
 ## Documentation
 
-📚 **Additional Guides:**
+ **Additional Guides:**
 
 - **[QUICK_START.md](QUICK_START.md)** - Essential commands for model serving
 - **[SERVING_GUIDE.md](SERVING_GUIDE.md)** - Comprehensive deployment guide
 
-📖 **External Resources:**
+ **External Resources:**
 
 - **MLflow**: [MLflow Documentation](https://mlflow.org/docs/latest/index.html)
 - **DagsHub**: [DagsHub Tutorial](https://dagshub.com/docs/tutorial/)
