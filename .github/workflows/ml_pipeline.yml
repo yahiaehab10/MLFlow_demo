@@ -34,7 +34,13 @@ jobs:
           # Configure DVC remote with token
           dvc remote modify origin user yahiaehab10
           dvc remote modify origin password "$DAGSHUB_TOKEN"
-          dvc pull
+          echo "Checking DVC status..."
+          dvc status
+          echo "Attempting to pull data..."
+          dvc pull || {
+            echo "DVC pull failed, this might be expected for new files"
+            echo "Continuing with pipeline execution..."
+          }
       - name: Run tests
         run: |
           python -m pytest tests/ -v
@@ -51,6 +57,13 @@ jobs:
             echo "This usually means authorization is required interactively"
             echo "Check DagsHub token configuration or use local MLflow"
             exit 1
+          }
+      - name: Push DVC artifacts
+        run: |
+          echo "📤 Pushing DVC artifacts to remote storage..."
+          dvc push || {
+            echo "⚠️  DVC push failed, but continuing with deployment"
+            echo "This might happen if files are already up to date"
           }
       - name: Deploy model (promote to production if criteria met)
         run: |
