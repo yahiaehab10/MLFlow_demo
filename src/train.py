@@ -5,7 +5,7 @@ import mlflow
 import dagshub
 
 
-def train_model(data_path, stage=None):
+def train_model(data_path, stage=None, dagshub_connected=False):
     df = pd.read_csv(data_path)
     X = df.drop("target", axis=1)
     y = df["target"]
@@ -20,23 +20,43 @@ def train_model(data_path, stage=None):
     mlflow.log_param("n_estimators", 100)
     mlflow.log_param("random_state", 42)
     mlflow.log_metric("accuracy", acc)
-    model_info = mlflow.sklearn.log_model(clf, "model")
-    # Register the model in the MLflow Model Registry
-    model_uri = model_info.model_uri
-    registered_model = mlflow.register_model(model_uri, "IrisRandomForest")
-    print(f"Model trained with accuracy: {acc}")
-    print(
-        f"Model registered as 'IrisRandomForest', version: {registered_model.version}"
-    )
-    # Optionally transition the model to a specified stage
-    if stage in ["Staging", "Production"]:
-        client = mlflow.tracking.MlflowClient()
-        client.transition_model_version_stage(
-            name="IrisRandomForest", version=registered_model.version, stage=stage
-        )
+    
+    # Only log model artifacts if connected to DagsHub
+    if dagshub_connected:
+        model_info = mlflow.sklearn.log_model(clf, "model")
+        # Register the model in the MLflow Model Registry
+        model_uri = model_info.model_uri
+        registered_model = mlflow.register_model(model_uri, "IrisRandomForest")
+        print(f"Model trained with accuracy: {acc}")
         print(
-            f"Model version {registered_model.version} transitioned to stage: {stage}"
+            f"Model registered as 'IrisRandomForest', version: {registered_model.version}"
         )
+        # Optionally transition the model to a specified stage
+        if stage in ["Staging", "Production"]:
+            client = mlflow.tracking.MlflowClient()
+            client.transition_model_version_stage(
+                name="IrisRandomForest", version=registered_model.version, stage=stage
+            )
+            print(
+                f"Model version {registered_model.version} transitioned to stage: {stage}"
+            )
+    else:
+        # For local MLflow, save model locally and skip artifact logging
+        import pickle
+        import os
+        
+        # Create models directory if it doesn't exist
+        os.makedirs("models", exist_ok=True)
+        
+        # Save model locally
+        model_path = "models/iris_model.pkl"
+        with open(model_path, "wb") as f:
+            pickle.dump(clf, f)
+        
+        print(f"Model trained with accuracy: {acc}")
+        print(f"🗂️  Model saved locally at: {model_path}")
+        print("⚠️  Skipping model registration (local MLflow mode)")
+    
     return clf, acc
 
 

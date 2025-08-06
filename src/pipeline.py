@@ -58,10 +58,16 @@ def run_pipeline():
             "data/processed/iris_clean.csv",
             drift_report_path,
         )
-        mlflow.log_artifact(drift_report_path, artifact_path="drift_reports")
+        
+        # Only log artifacts if connected to DagsHub, skip for local MLflow
+        if dagshub_connected:
+            mlflow.log_artifact(drift_report_path, artifact_path="drift_reports")
+        else:
+            print(f"📁 Drift report saved locally at: {drift_report_path}")
+            print("⚠️  Skipping artifact upload (local MLflow mode)")
 
         # Step 3: Train model
-        model, acc = train_model("data/processed/iris_clean.csv")
+        model, acc = train_model("data/processed/iris_clean.csv", dagshub_connected=dagshub_connected)
         mlflow.log_metric("accuracy", acc)
 
         # Save metrics to JSON file for DVC
