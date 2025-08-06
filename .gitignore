@@ -206,6 +206,30 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-# data
-# data
+# MLflow tracking data
+mlruns/
+.mlflow/
+
+# DVC managed files (already tracked by DVC)
 /metrics.json
+
+# Model artifacts (managed by DVC/MLflow or generated locally)
+models/*.pkl
+models/*.joblib
+models/*.h5
+models/*.onnx
+
+# Data drift reports and analysis outputs
+data/drift_baseline/*.html
+data/processed/*.csv
+
+# DagsHub configuration (contains tokens/credentials)
+.dagshub/
+
+# Data files (uncomment if you don't want to track data)
+# data/raw/
+# data/processed/
+
+# Temporary files
+temp.*
+*.tmp
